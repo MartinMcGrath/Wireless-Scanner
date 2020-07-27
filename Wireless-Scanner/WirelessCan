@@ -1,0 +1,103 @@
+#!/usr/bin/perl
+# Made by Edoardo Mantovani, 2020
+
+#If appear some errors related to the wpa_cli/wpa_supplicant please, execute:
+# sudo wpa_supplicant -dd -Dnl80211,wext -i wlo1 -c /etc/wpa_supplicant/wpa_supplicant.conf 
+# NOTE: wlo1 can be substituted to your wireless interface
+
+sub BEGIN{
+
+no strict;
+use File::chmod qw( chmod );
+
+if(! ( -e 'Executor.pl' ) ){ # check if Executor.pl exists, if not..
+my $Executor_Script = ''; #insert the script into the ' '
+
+open (EXECUTOR, '>', 'Executor.pl'); 
+print EXECUTOR "#!/usr/bin/perl \n";
+print EXECUTOR "$Executor_Script\n";
+close EXECUTOR;
+chmod("u+x", 'Executor.pl'); # like chmod +x <file>
+}
+ 
+if(! ( -e 'screen.txt') ){
+  open(SCREEN, '>', 'screen.txt');
+  print SCREEN "focus up\n";
+  print SCREEN "title 'Wireless scanner'\n";
+  print SCREEN "screen perl WirelessCan\n";
+  print SCREEN "split\n";
+  print SCREEN "resize -b +7 \n";
+  print SCREEN "focus bottom\n";
+  print SCREEN "title 'Wireless Sender'\n";
+  print SCREEN "focus down\n";
+  print SCREEN "screen perl Executor.pl \n";
+  close SCREEN;
+  ` screen -c 'screen.txt' `; 
+  }
+}
+
+sub END{
+
+use strict;
+no strict 'refs';
+no strict 'subs';
+use File::Path 'rmtree';
+use Term::Multiplexed qw( multiplexed ); 
+use Term::ANSIColor qw(colored);
+use Net::Bluetooth qw( get_remote_devices ); # Bluetooth detector utility
+use Net::Wireless::802_11::WPA::CLI; # wireless WPA_SUPPLICANT interface
+
+if( multiplexed ){ # detect if the code is running in a multiplexed screen
+
+rmtree('screen.txt');  
+#rmtree('Executor.pl');
+
+my $scan = Net::Wireless::802_11::WPA::CLI->new();
+
+my $x = 0;
+my @BSSID;
+sub Wireless_Scan(){
+  $scan->scan();
+  foreach ( $scan->scan_results() ){
+    if($_ =~ /:/){
+      push @BSSID, $_;
+    }else{
+       if(length($_->{ssid}) != 25){
+         while(length($_->{ssid}) != 25){    # leverage the distance between the SSID and the '|' 
+            chop($_->{ssid}) if (length($_->{ssid}) > 25);
+            $_->{ssid} .= " " if (length($_->{ssid}) < 25);
+            }
+          } 
+     print  colored(['red'], $_->{ssid}, '   |  ', colored(['cyan'],$BSSID[$x]), ' ', colored(['green'], $_->{frequency}), ' ', colored(['yellow'], $_->{flags}), "\n"); # print various informations in a fashion/colored way
+     $x++; 
+}  
+  
+  }
+
+}
+my $Bluetooth_Devices = get_remote_devices();
+my $counter = 0;
+sub Bluetooth_Scan(){
+    $counter++;
+    if( int( $counter % 50 ) ){
+	foreach( keys %$Bluetooth_Devices ){
+	    print $Bluetooth_Devices->{ $_ };
+	    print "\n";
+	}
+  }
+  }
+while(1){
+  printf "\033c"; # clear completely the screen
+  sleep (1); # upload frequency
+  print colored(['bold blue'], "Wireless Scan\n");
+  print colored(['bold green'], "SSID                           BSSID                  SECURITY\n");  # Wireless columns
+  print &Wireless_Scan(); 
+  print colored(['bold blue'], "Bluetooth Scan\n");
+  print colored(['bold green'], "Name                            Address\n"); # Bluetooth columns
+  print &Bluetooth_Scan();
+      }
+   }
+
+}
+  
+  

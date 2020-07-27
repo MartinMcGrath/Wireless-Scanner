@@ -1,0 +1,25 @@
+--- #YAML:1.0
+name:               Wireless-Scanner
+version:            0.032
+abstract:           Wireless-Scanner is a small script which scan both bluetooth and wifi devices near you ( BETA 0.032 )
+author: 
+    - Edoardo Mantovani <mantovani.edoardo18@gmail.com>
+license:            GPL
+distribution_type:  module
+configure_requires:
+build_requires:
+    ExtUtils::MakeMaker:  0
+requires:
+    File::chmod :  0
+    File::Path: 0
+    Term::Multiplexed: 0 
+    Term::ANSIColor: 0
+    Net::Bluetooth: 0
+    Net::Wireless::802_11::WPA::CLI: 0
+    Chart::Clicker: 0
+no_index:
+    directory:
+generated_by:       ExtUtils::MakeMaker version 6.55_02
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4

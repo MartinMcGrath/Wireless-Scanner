@@ -1,0 +1,66 @@
+ 
+# NAME
+       Wireless::Scanner - a small utility which scan near Bluetooth and Wifi networks
+
+# INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Makefile.PL
+	make
+	// make test (STILL IN BETA, SKIPPING FOR NOW..)
+	make install
+
+# USAGE
+        sudo perl WirelessCan
+        
+# DESCRIPTION
+
+## DETAILS   
+   As the name suggests, this script scan the near networks, both bluetooth and wireless are shown in a pretty formatted output.
+   I have uploaded an additional script "Executor.pl", which can be used as CLI in the lower part of the screen.
+   for additional info see the comments in the script
+     (the script need also the linux screen utility for split the screen)
+ 
+# AUTHOR
+       Edoardo Mantovani
+ 
+
+# NOTE
+
+   - The documentation will added during the project uodates, this is only an alpha, in future will be even more complex
+   - Probably the bluetooth scan won't work, I am still working on it, BLE devices aren't recognized because I haven't found any BLE compatible module.
+   - The script hasn't a Makefile.PL or make, for building the dependencies execute only the "install-deps.sh" script.
+# TODO
+
+  - speed up the first part
+  - make an android version ( android chips doesn't support monitor mode )
+  - add more "Executor" scripts
+  - create a WPA_CLI error auto-detection against errors like: "Could not connect to wpa_supplicant ... "
+
+# FUTURE INTENTIONS
+
+  The perl programming language has a wide variety of libraries, it has a good Networking distribution but, excluding the Net::Bluetooth library,
+  the bluetooth support doesn't exist.
+  In a non-too-remote future I would like to built a library for controlling bluetooth 3.0 and BLE standard, I have some ideas related about the C library  which will be used. 
+  
+# FOR REQUESTS
+  EMAIL ME :)
+
+# COPYRIGHT
+       Copyright (c) 2020 Edoardo Mantovani, All Rights Reserved.
+ 
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself, either Perl version 5 or, at your
+       option, any later version of Perl you may have available (perl and glue
+       code).
+ 
+       This library is free software; you can redistribute it and/or modify it
+       under the terms of the GNU Lesser General Public License as published
+       by the Free Software Foundation; either version 2 of the License, or
+       (at your option) any later version.
+ 
+       This library is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+       General Public License for more details.
